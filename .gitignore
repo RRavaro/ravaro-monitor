@@ -1,0 +1,13 @@
+# Öffentlich wird nur, was hier ausdrücklich steht. Neue Dateien bleiben von selbst privat.
+*
+!.gitignore
+!README.md
+!LICENSE.md
+!WINDOWS.md
+!app/
+!app/**
+# Fremdes Logo: Ohne diese Datei baut die App den Roboterkopf.
+app/Sources/RavaroMonitor/ClaudeSymbol.swift
+app/.build/
+.DS_Store
+._*
