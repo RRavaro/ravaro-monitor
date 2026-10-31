@@ -143,7 +143,7 @@ final class Modell: ObservableObject {
     @Published var einrichtungFertig: Bool { didSet { ablage.set(einrichtungFertig, forKey: "einrichtungFertig") } }
     @Published var autostart = SMAppService.mainApp.status == .enabled
 
-    static let version = "v1.26"
+    static let version = "v1.27"
     /// Fotos und Proben dürfen die eigenen Einstellungen nicht anfassen.
     private let ablage: UserDefaults = {
         if let suite = ProcessInfo.processInfo.environment["RAVARO_ABLAGE"] { return UserDefaults(suiteName: suite) ?? .standard }

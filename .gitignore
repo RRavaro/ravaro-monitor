@@ -4,6 +4,8 @@
 !README.md
 !LICENSE.md
 !WINDOWS.md
+!bilder/
+!bilder/**
 !app/
 !app/**
 # Fremdes Logo: Ohne diese Datei baut die App den Roboterkopf.

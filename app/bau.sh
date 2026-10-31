@@ -2,7 +2,7 @@
 # Baut RAVARO Monitor.app ohne Xcode und legt sie nach ~/Applications.
 set -euo pipefail
 cd "$(dirname "$0")"
-VERSION=1.26
+VERSION=1.27
 
 # Das Claude-Symbol kommt nur mit, wenn die private Datei daliegt. OEFFENTLICH=1 baut die Fassung mit Roboterkopf.
 SYMBOL=""

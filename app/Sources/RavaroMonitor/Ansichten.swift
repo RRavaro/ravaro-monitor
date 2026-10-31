@@ -116,10 +116,19 @@ struct Ring: View {
             Circle().trim(from: 0, to: max(0.012, min(1, anteil / 100)))
                 .stroke(farbton, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-            if claude { LimitSymbol().fill(Color.text.opacity(0.3)).frame(width: durchmesser * 0.55, height: durchmesser * 0.55) }
-            if let mitte { Image(systemName: mitte).font(.system(size: durchmesser * 0.36)).foregroundColor(.text) } else { Text(text).font(.mikro(durchmesser > 36 ? 14 : 12)).foregroundColor(claude ? .orange2 : .text) }
+            if claude { LimitSymbol().fill(Color.text).frame(width: durchmesser * 0.58, height: durchmesser * 0.58) }
+            if let mitte { Image(systemName: mitte).font(.system(size: durchmesser * 0.36)).foregroundColor(.text) } else if !claude { Text(text).font(.mikro(durchmesser > 36 ? 14 : 12)).foregroundColor(.text) }
         }
         .frame(width: durchmesser, height: durchmesser)
+    }
+}
+
+/// Die Zahl unter den Limit-Ringen, im Ring selbst steht das Symbol.
+struct RingZahl: View {
+    var text: String
+
+    var body: some View {
+        Text(text == "–" ? text : "\(text)%").font(.mikro(12)).foregroundColor(.text).lineLimit(1).fixedSize()
     }
 }
 
@@ -220,6 +229,7 @@ struct Lasche: View {
                     VStack(spacing: 4) {
                         if modell.ringSymbol(e.schluessel) == nil { Image(systemName: e.symbol).font(.system(size: 12)).foregroundColor(.text) }
                         Ring(anteil: e.belegt, farbton: e.farbton, text: e.text, claude: claude, mitte: modell.ringSymbol(e.schluessel))
+                        if claude { RingZahl(text: e.text) }
                     }
                     .schwebe { an, r in modell.erklaeren(an ? e.schluessel : nil, r) }
                 }
@@ -278,6 +288,7 @@ struct Bruecke: View {
                     HStack(spacing: 4) {
                         if modell.ringSymbol(e.schluessel) == nil { Image(systemName: e.symbol).font(.system(size: 12)).foregroundColor(.text) }
                         Ring(anteil: e.belegt, farbton: e.farbton, text: e.text, durchmesser: 36, claude: claude, mitte: modell.ringSymbol(e.schluessel))
+                        if claude { RingZahl(text: e.text) }
                     }
                     .schwebe { an, r in modell.erklaeren(an ? e.schluessel : nil, r) }
                 }

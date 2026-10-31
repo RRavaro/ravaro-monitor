@@ -20,8 +20,8 @@ struct PanelRing: View {
             Circle().inset(by: strich / 2).trim(from: 0, to: max(0.012, min(1, anteil / 100)))
                 .stroke(farbton, style: StrokeStyle(lineWidth: strich, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-            if claude { LimitSymbol().fill(Color.text.opacity(0.3)).frame(width: durchmesser * 0.72, height: durchmesser * 0.72).opacity(inhalt) }
-            if let mitte { Image(systemName: mitte).font(.system(size: durchmesser * 0.3)).foregroundColor(.text).opacity(inhalt) } else if !text.isEmpty { Text(text).font(.kopf(22)).monospacedDigit().foregroundColor(claude ? .orange2 : .text).opacity(inhalt) }
+            if claude { LimitSymbol().fill(Color.text).frame(width: durchmesser * 0.56, height: durchmesser * 0.56).opacity(inhalt) }
+            if let mitte { Image(systemName: mitte).font(.system(size: durchmesser * 0.3)).foregroundColor(.text).opacity(inhalt) } else if !text.isEmpty && !claude { Text(text).font(.kopf(22)).monospacedDigit().foregroundColor(.text).opacity(inhalt) }
         }
         .frame(width: durchmesser, height: durchmesser)
     }
@@ -323,7 +323,7 @@ struct Panel: View {
     private func ringKarte(_ k: String, _ belegt: Double, _ farbton: Color, _ text: String, _ hilfe: String, eng: Bool) -> some View {
         let ziel: Reiter = k == "ram" || k == "akku" ? .mac : (k == "platte" ? .platten : .claude)
         let name = Bereich.alle.first { $0.schluessel == k }?.name ?? k
-        let unter = ringUnter(k, leer: text == "–", eng: eng)
+        let unter = ringUnter(k, text, leer: text == "–", eng: eng)
         return Button { ringGewaehlt(k, ziel) } label: {
             VStack(spacing: 6) {
                 PanelRing(anteil: belegt, farbton: farbton, text: text, claude: k == "woche" || k == "fuenf", durchmesser: eng ? 78 : 96, strich: eng ? 8 : 9, mitte: modell.ringSymbol(k))
@@ -341,7 +341,7 @@ struct Panel: View {
         .accessibilityLabel(name).accessibilityValue(hilfe)
     }
 
-    private func ringUnter(_ k: String, leer: Bool, eng: Bool) -> String {
+    private func ringUnter(_ k: String, _ text: String, leer: Bool, eng: Bool) -> String {
         if leer { return (k == "woche" || k == "fuenf") && !modell.darf(.claude) ? L("ohne Freigabe", "no permission") : L("noch kein Wert", "no value yet") }
         switch k {
         case "ram": return (eng ? "" : L("belegt, ", "used, ")) + L("\(modell.speicher.frei) % frei", "\(modell.speicher.frei) % free")
@@ -349,7 +349,7 @@ struct Panel: View {
         case "akku":
             guard let a = modell.akku else { return "" }
             return a.laedt ? L("lädt", "charging") : (a.amStrom ? L("am Strom", "plugged in") : L("ohne Strom", "on battery"))
-        default: return eng ? L("genutzt", "used") : L("Claude, genutzt", "Claude, used")
+        default: return L("\(text) % genutzt", "\(text) % used")
         }
     }
 
